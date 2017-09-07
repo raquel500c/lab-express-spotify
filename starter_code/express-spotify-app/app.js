@@ -2,20 +2,25 @@ const SpotifyWebApi = require('spotify-web-api-node');
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const bodyParser = require('body-parser');
-const morgan = require('morgan');
+const logger = require('morgan');
 const prettyjson = require('prettyjson');
 
 // Express server handling requests and responses
 const app = express();
 
-app.use(expressLayouts);
 app.set('layout', 'main-layout');
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
-app.use(bodyParser.urlencoded({extended: true}));
+
+app.use(logger('dev'));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 app.use(express.static('public'));
-app.use(morgan('dev'));
-app.listen(3000);
+
+app.listen(3000, () => {
+  console.log("Holi!");
+});
 
 // My credentials:
 const clientId = '2e99a7bf2af347c1a21b1ec96e578658';
@@ -33,3 +38,8 @@ spotifyApi.clientCredentialsGrant()
   }, function(err) {
     console.log('Something went wrong when retrieving an access token', err);
   });
+
+ app.get('/', (req,res) =>{
+
+    res.render('index')
+    });
